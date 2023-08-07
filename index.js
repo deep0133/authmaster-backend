@@ -36,7 +36,8 @@ app.use(session({
     },
 }));
 
-const allowedOrigins = ['http://localhost:3002'];
+const frontendUrl = process.env.FRONTEND_URL
+const allowedOrigins = [frontendUrl];
 
 const corsOptions = {
     origin: function (origin, callback) {
