@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
@@ -8,12 +9,14 @@ const flash = require("connect-flash")
 const cloudinary = require("cloudinary").v2
 const cors = require('cors')
 const app = express();
-const PORT = process.env.PORT || 5000;
+
 
 // config
 dotenv.config({ path: "./config/config.env" })
 require("./config/db")
 require('./config/passport.js');
+
+const PORT = process.env.PORT || 5000;
 
 // cloudinarys setup
 cloudinary.config({
@@ -28,16 +31,14 @@ app.use(session({
     secret: process.env.SESSION_SECRET_KEY || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        secure: false, // Set to true if your app is served over HTTPS
-        maxAge: 3600000, // Set the session expiration time in milliseconds (1 hour in this case)
-        httpOnly: true,
-        sameSite: false
-    },
+    store: new MongoStore({
+        mongoUrl: process.env.DB_URL,
+        ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks)
+    }),
 }));
 
 const frontendUrl = process.env.FRONTEND_URL
-const allowedOrigins = [frontendUrl];
+const allowedOrigins = [frontendUrl, "http://localhost:3002"];
 
 const corsOptions = {
     origin: function (origin, callback) {
@@ -52,6 +53,7 @@ const corsOptions = {
 
 
 // Middleware
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
