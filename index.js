@@ -35,6 +35,10 @@ app.use(session({
         mongoUrl: process.env.DB_URL,
         ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks)
     }),
+    cookie: {
+        secure: true,
+        sameSite: "none",
+    }
 }));
 
 const frontendUrl = process.env.FRONTEND_URL
