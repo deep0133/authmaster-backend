@@ -35,17 +35,10 @@ app.use(session({
         mongoUrl: process.env.DB_URL,
         ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks)
     }),
-    cookie: {
-        // Set additional cookie options here
-        httpOnly: true, // Ensures cookies are accessible only via HTTP(S) and not JavaScript
-        secure: true, // Set this to true if your application is served over HTTPS
-        sameSite: 'none', // Allows cross-site cookies (for example, between different subdomains)
-        maxAge: 14 * 24 * 60 * 60 * 1000, // Cookie expiration in milliseconds (2 weeks)
-    },
 }));
 
 const frontendUrl = process.env.FRONTEND_URL
-const allowedOrigins = [frontendUrl, "http://localhost:3002"];
+const allowedOrigins = [frontendUrl];
 
 const corsOptions = {
     origin: function (origin, callback) {
