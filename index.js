@@ -41,7 +41,6 @@ app.use(session({
         },
     }),
     cookie: {
-        domain: 'authmasterdevchallenge.netlify.app',
         secure: true,
         sameSite: 'strict',
     },
