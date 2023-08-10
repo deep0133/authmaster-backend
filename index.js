@@ -34,16 +34,16 @@ app.use(session({
     store: new MongoStore({
         mongoUrl: process.env.DB_URL,
         ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks),
-        autoRemove: 'native', // Add this line to remove expired sessions
-        collectionName: 'mySessions', // Customize the collection name
+        autoRemove: 'native',
+        collectionName: 'mySessions',
         mongoOptions: {
-            useUnifiedTopology: true, // Add other MongoDB options as needed
+            useUnifiedTopology: true,
         },
     }),
     cookie: {
-        domain: '.netlify.app', // Allow cookie sharing across subdomains
-        secure: true, // Send cookies only over HTTPS
-        sameSite: 'strict', // Control when cookies are sent
+        domain: 'authmasterdevchallenge.netlify.app',
+        secure: true,
+        sameSite: 'strict',
     },
 }));
 
