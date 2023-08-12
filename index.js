@@ -53,8 +53,8 @@ const corsOptions = {
         }
     },
     credentials: true,
-    methods: ['GET', 'POST', "PATCH"], // Specify the HTTP methods you'll use
-    exposedHeaders: ['Set-Cookie'], // Expose the Set-Cookie header for cross-origin access
+    methods: ['GET', 'POST', "PATCH"],
+    exposedHeaders: ['Set-Cookie'],
 };
 
 
@@ -65,18 +65,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(cors(corsOptions));
-
-
-// Custom middleware to log cookies before sending
-app.use((req, res, next) => {
-    if (req.method === 'POST' && (req.path === '/auth/login' || req.path === '/auth/register')) {
-        const id = decodeURIComponent(req.sessionID)
-        console.log('Session Cookie to be sent:', req.sessionID, id);
-    }
-    // console.log('Cookies being sent:', req.headers.cookie);
-    next();
-});
-
 
 // Routes
 app.use('/auth', authRouter);
