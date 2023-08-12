@@ -6,7 +6,6 @@ const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const dotenv = require("dotenv")
 const flash = require("connect-flash")
-const cookieParser = require('cookie-parser');
 const cloudinary = require("cloudinary").v2
 const cors = require('cors')
 const app = express();
@@ -26,7 +25,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-app.use(cookieParser());
 // Set up session middleware
 app.use(session({
     secret: process.env.SESSION_SECRET_KEY || 'your-secret-key',
