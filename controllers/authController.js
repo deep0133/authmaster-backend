@@ -36,14 +36,16 @@ async function login(req, res) {
     }
     const user = { ...req.user.toJSON() }
     delete user["password"]
-    res.cookie('cookie_token', user._id, { expires: 14 * 24 * 60 * 60 * 1000, httpOnly: true }).status(200).json({ success: true, msg: "Login Successfull", user })
+    const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+    const frontendUrl = process.env.FRONTEND_URL
+    res.cookie('cookie_token', user._id, { expires: expirationTime, httpOnly: true, secure: true, domain: frontendUrl }).status(200).json({ success: true, msg: "Login Successfull", user })
 }
 
 async function authSuccess(req, res) {
     const FRONTEND_URL = process.env.FRONTEND_URL;
     const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000); // Calculate expiration time
-
-    res.cookie('cookie_token', req.user._id, { expires: expirationTime, httpOnly: true });
+    const frontendUrl = process.env.FRONTEND_URL
+    res.cookie('cookie_token', req.user._id, { expires: expirationTime, httpOnly: true, secure: true, domain: frontendUrl });
     res.redirect(FRONTEND_URL);
 }
 
@@ -64,6 +66,8 @@ function logoutUser(req, res) {
                 // Handle error, if any
                 return res.status(500).json({ success: false, msg: "Logout failed.", error: err });
             }
+            const frontendUrl = process.env.FRONTEND_URL
+            res.cookie('cookie_token', null, { expires: expirationTime, httpOnly: true, secure: true, domain: frontendUrl });
             return res.json({ success: true, msg: "Logout successful" });
         })
     }
