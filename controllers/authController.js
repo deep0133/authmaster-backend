@@ -53,7 +53,7 @@ async function authSuccess(req, res) {
 async function errorMessage(req, res) {
     // Retrieve the flash message, if any, from the session
     let flashMessage = await req.flash('error')[0];
-    const frontendLoginUrl = 'http://localhost:3002/login'
+    const frontendLoginUrl = process.env.FRONTEND_URL
     res.redirect(`${frontendLoginUrl}?message=${encodeURIComponent(flashMessage || "try_again_with_other_way")}`);
 }
 
@@ -67,7 +67,7 @@ function logoutUser(req, res) {
                 return res.status(500).json({ success: false, msg: "Logout failed.", error: err });
             }
             const frontendUrl = process.env.FRONTEND_URL
-            res.cookie('cookie_token', null, { expires: expirationTime, httpOnly: true, secure: true, domain: frontendUrl });
+            res.cookie('cookie_token', null, { expires: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), httpOnly: true, secure: true, domain: frontendUrl });
             return res.json({ success: true, msg: "Logout successful" });
         })
     }
