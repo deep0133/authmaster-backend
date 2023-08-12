@@ -4,7 +4,6 @@ const authRouter = express.Router();
 const authController = require('../controllers/authController');
 const passport = require('passport');
 
-
 // User login or register with Local
 authRouter.post(
     '/register',
@@ -39,25 +38,25 @@ authRouter.post('/login',
 // User login or register with Google
 authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 authRouter.get('/google/callback', passport.authenticate('google', {
-    successRedirect: "http://localhost:3002/",
+    successRedirect: '/auth/success',
     failureRedirect: '/auth/error',
     failureFlash: true
 }));
+
 
 
 // User login or register with Facebook 
 authRouter.get('/facebook', passport.authenticate('facebook', { failureFlash: true }));
 authRouter.get('/facebook/callback', passport.authenticate('facebook', {
-    successRedirect: "http://localhost:3002/",
+    successRedirect: '/auth/success',
     failureRedirect: '/auth/error',
     failureFlash: true
 }));
 
-
 // User login or register with Twitter
 authRouter.get('/twitter', passport.authenticate('twitter'));
 authRouter.get('/twitter/callback', passport.authenticate('twitter', {
-    successRedirect: "http://localhost:3002/",
+    successRedirect: '/auth/success',
     failureRedirect: '/auth/error',
     failureFlash: true
 }));
@@ -66,12 +65,12 @@ authRouter.get('/twitter/callback', passport.authenticate('twitter', {
 // User login or register with Github
 authRouter.get('/github', passport.authenticate('github'));
 authRouter.get('/github/callback', passport.authenticate('github', {
-    successRedirect: "http://localhost:3002/",
+    successRedirect: '/auth/success',
     failureRedirect: '/auth/error',
     failureFlash: true
 }));
 
-
+authRouter.get('/success', authController.authSuccess)
 authRouter.get('/error', authController.errorMessage);
 
 // User logout

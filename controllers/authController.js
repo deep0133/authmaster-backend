@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
 
+
 // User registration route
 async function register(req, res) {
     try {
@@ -35,7 +36,15 @@ async function login(req, res) {
     }
     const user = { ...req.user.toJSON() }
     delete user["password"]
-    res.status(200).json({ success: true, msg: "Login Successfull", user })
+    res.cookie('cookie_token', user._id, { expires: 14 * 24 * 60 * 60 * 1000, httpOnly: true }).status(200).json({ success: true, msg: "Login Successfull", user })
+}
+
+async function authSuccess(req, res) {
+    const FRONTEND_URL = process.env.FRONTEND_URL;
+    const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000); // Calculate expiration time
+
+    res.cookie('cookie_token', req.user._id, { expires: expirationTime, httpOnly: true });
+    res.redirect(FRONTEND_URL);
 }
 
 // route to handle the error and display the flash message
@@ -69,6 +78,7 @@ function logoutUser(req, res) {
 module.exports = {
     register,
     login,
+    authSuccess,
     errorMessage,
     logoutUser,
 };
