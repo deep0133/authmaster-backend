@@ -39,12 +39,12 @@ async function login(req, res) {
     const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
     const frontendUrl = process.env.FRONTEND_URL
     const urlWithoutProtocol = frontendUrl.replace(/^https?:\/\//, '');
+    res.header('Money', 'money setting for finding alternat solution of cookie problems');
     res.cookie('cookie_token', user._id, {
-        domain: '.authmasterdevchallenge.netlify.app',
         maxAge: 14 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
-        sameSite: 'None',
+        sameSite: 'none',
     }).status(200).json({ success: true, msg: "Login Successfull", user })
 }
 
