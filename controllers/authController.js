@@ -38,7 +38,8 @@ async function login(req, res) {
     delete user["password"]
     const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
     const frontendUrl = process.env.FRONTEND_URL
-    const urlWithoutProtocol = "." + frontendUrl.replace(/^https?:\/\//, '');
+    const urlWithoutProtocol = frontendUrl.replace(/^https?:\/\//, '');
+    console.log("url without protocol : ", urlWithoutProtocol)
     res.cookie('cookie_token', user._id, { expires: expirationTime, httpOnly: true, secure: true, domain: urlWithoutProtocol }).status(200).json({ success: true, msg: "Login Successfull", user })
 }
 
