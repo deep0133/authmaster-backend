@@ -39,8 +39,13 @@ async function login(req, res) {
     const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
     const frontendUrl = process.env.FRONTEND_URL
     const urlWithoutProtocol = frontendUrl.replace(/^https?:\/\//, '');
-    console.log("url without protocol : ", urlWithoutProtocol)
-    res.cookie('cookie_token', user._id, { expires: expirationTime, httpOnly: true, secure: true, domain: urlWithoutProtocol }).status(200).json({ success: true, msg: "Login Successfull", user })
+    res.cookie('cookie_token', user._id, {
+        domain: '.authmasterdevchallenge.netlify.app',
+        maxAge: 14 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+    }).status(200).json({ success: true, msg: "Login Successfull", user })
 }
 
 async function authSuccess(req, res) {

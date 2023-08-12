@@ -54,7 +54,9 @@ const corsOptions = {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', "PATCH"], // Specify the HTTP methods you'll use
+    exposedHeaders: ['Set-Cookie'], // Expose the Set-Cookie header for cross-origin access
 };
 
 
