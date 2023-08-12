@@ -36,16 +36,14 @@ async function login(req, res) {
     }
     const user = { ...req.user.toJSON() }
     delete user["password"]
-    const expirationTime = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    const frontendUrl = process.env.FRONTEND_URL
-    const urlWithoutProtocol = frontendUrl.replace(/^https?:\/\//, '');
-    res.header('Money', 'money setting for finding alternat solution of cookie problems');
+
     res.cookie('cookie_token', user._id, {
         maxAge: 14 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-    }).status(200).json({ success: true, msg: "Login Successfull", user })
+    })
+    res.status(200).json({ success: true, msg: "Login Successfull", user })
 }
 
 async function authSuccess(req, res) {
