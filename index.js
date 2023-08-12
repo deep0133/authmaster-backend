@@ -6,6 +6,7 @@ const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const dotenv = require("dotenv")
 const flash = require("connect-flash")
+const cookieParser = require('cookie-parser');
 const cloudinary = require("cloudinary").v2
 const cors = require('cors')
 const app = express();
@@ -25,7 +26,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-
+app.use(cookieParser());
 // Set up session middleware
 app.use(session({
     secret: process.env.SESSION_SECRET_KEY || 'your-secret-key',
@@ -40,10 +41,6 @@ app.use(session({
             useUnifiedTopology: true,
         },
     }),
-    cookie: {
-        secure: true,
-        sameSite: 'strict',
-    },
 }));
 
 const frontendUrl = process.env.FRONTEND_URL
@@ -70,25 +67,38 @@ app.use(flash());
 app.use(cors(corsOptions));
 
 
+// Custom middleware to log cookies before sending
+app.use((req, res, next) => {
+    if (req.method === 'POST' && (req.path === '/auth/login' || req.path === '/auth/register')) {
+        const id = decodeURIComponent(req.sessionID)
+        console.log('Session Cookie to be sent:', req.sessionID, id);
+    }
+    // console.log('Cookies being sent:', req.headers.cookie);
+    next();
+});
+
+
 // Routes
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 
-app.get("/", (req, res) => {
-    res.json({
-        success: true,
-        msg: "Server is running"
-    })
+
+app.get('*', (req, res) => {
+    throw new Error("Method Not Allow")
+})
+app.post('*', (req, res) => {
+    throw new Error("Method Not Allow")
 })
 
-app.get("*", (req, res) => {
-    res.json({
+// Error Handling
+app.use((err, req, res, next) => {
+    res.status(405).json({
         success: false,
-        error: "Method Not allowed"
+        err: err.message
     })
 })
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running`);
 });
