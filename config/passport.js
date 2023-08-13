@@ -7,6 +7,7 @@ const GitHubStrategy = require("passport-github").Strategy;
 const User = require("../models/User");
 
 
+const backend_url = process.env.BACKEND_URL + '/auth/'
 /**
  *  Auth Strategy
  *  - Two params - pass
@@ -33,13 +34,13 @@ passport.use(
 );
 
 
-
+// https://auth-backend-hxu1.onrender.com/auth/google/callback
 passport.use(
     new GoogleStrategy(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/google/callback",
+            callbackURL: backend_url + 'google/callback',
         },
         async (accessToken, refreshToken, profile, done) => {
             // Handle Google authentication logic
@@ -81,7 +82,7 @@ passport.use(
         {
             clientID: process.env.FACEBOOK_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/facebook/callback",
+            callbackURL: backend_url + 'facebook/callback',
             profileFields: ['id', 'displayName', 'email', 'picture.type(large)'],
             scope: ['email']
         },
@@ -127,7 +128,7 @@ passport.use(
         {
             consumerKey: process.env.TWITTER_CLIENT_ID,
             consumerSecret: process.env.TWITTER_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/twitter/callback",
+            callbackURL: backend_url + 'twitter/callback',
         },
         async (accessToken, refreshToken, profile, done) => {
 
@@ -170,7 +171,7 @@ passport.use(
         {
             clientID: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/github/callback",
+            callbackURL: backend_url + 'github/callback',
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
