@@ -41,6 +41,7 @@ app.use(session({
     }),
 }));
 
+
 const frontendUrl = process.env.FRONTEND_URL
 const allowedOrigins = [frontendUrl];
 
@@ -53,10 +54,12 @@ const corsOptions = {
         }
     },
     credentials: true,
-    methods: ['GET', 'POST', "PATCH"],
-    exposedHeaders: ['Set-Cookie'],
+    methods: ['GET', 'POST', 'PATCH'],
 };
 
+
+app.use(cors(corsOptions));
+app.options('*', cors());   // for preflight request
 
 // Middleware
 app.use(express.urlencoded({ extended: true }))
@@ -64,8 +67,18 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(cors(corsOptions));
-app.options('*', cors());   // for preflight request
+
+
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', frontendUrl);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+});
+
 
 // Routes
 app.use('/auth', authRouter);
