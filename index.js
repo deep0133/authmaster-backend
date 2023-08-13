@@ -58,6 +58,10 @@ const corsOptions = {
 };
 
 
+app.use((req, res, next) => {
+    console.log('Headers:', req.headers);
+    next();
+});
 
 // Set up custom CORS headers middleware
 app.use(function (req, res, next) {
