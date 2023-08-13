@@ -65,6 +65,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(cors(corsOptions));
+app.options('*', cors());   // for preflight request
 
 // Routes
 app.use('/auth', authRouter);
