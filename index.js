@@ -26,6 +26,7 @@ cloudinary.config({
 });
 
 // Set up session middleware
+app.set('trust proxy', 1); // Trust proxy headers
 app.use(session({
     secret: process.env.SESSION_SECRET_KEY || 'your-secret-key',
     resave: false,
@@ -39,6 +40,11 @@ app.use(session({
             useUnifiedTopology: true,
         },
     }),
+    proxy: true,
+    cookie: {
+        secure: true,
+        sameSite: 'none',
+    },
 }));
 
 
@@ -55,6 +61,7 @@ const corsOptions = {
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
 };
 
 
@@ -65,7 +72,7 @@ app.use((req, res, next) => {
 
 // Set up custom CORS headers middleware
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', frontendUrl);
+    res.header('Access-Control-Allow-Origin', req.headers['x-forwarded-proto'] + '://' + frontendUrl);
     res.header('Access-Control-Allow-Credentials', true);
     res.header(
         'Access-Control-Allow-Headers',
