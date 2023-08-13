@@ -54,23 +54,15 @@ const corsOptions = {
         }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PATCH'],
+    // methods: ['GET', 'POST', 'PATCH'],
 };
 
+// First, handle preflight requests
+app.options('*', cors());
 
-app.use(cors(corsOptions));
-app.options('*', cors());   // for preflight request
-
-// Middleware
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json());
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
-
-
+// Set up custom CORS headers middleware
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', frontendUrl);
+    res.header('Access-Control-Allow-Origin', process.env.CORS_URL);
     res.header('Access-Control-Allow-Credentials', true);
     res.header(
         'Access-Control-Allow-Headers',
@@ -78,6 +70,17 @@ app.use(function (req, res, next) {
     );
     next();
 });
+
+// Use the cors() middleware for regular requests
+app.use(cors(corsOptions));
+
+
+// Middleware
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 
 // Routes
