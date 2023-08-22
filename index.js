@@ -27,7 +27,7 @@ cloudinary.config({
 
 // Set up session middleware
 app.use(session({
-    secret: process.env.SESSION_SECRET_KEY || 'your-secret-key',
+    secret: process.env.SESSION_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({
