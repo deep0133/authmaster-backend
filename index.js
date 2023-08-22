@@ -59,7 +59,6 @@ const corsOptions = {
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH'],
-    exposedHeaders: ['Set-Cookies']
 };
 
 // Use the cors() middleware for regular requests
