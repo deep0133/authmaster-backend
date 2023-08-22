@@ -61,7 +61,6 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PATCH'],
 };
 
-// Use the cors() middleware for regular requests
 app.use(cors(corsOptions));
 
 // Middleware
