@@ -39,6 +39,10 @@ app.use(session({
             useUnifiedTopology: true,
         },
     }),
+    cookie: {
+        SameSite: 'None',
+        secure: true,
+    },
 }));
 
 
