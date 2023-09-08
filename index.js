@@ -25,26 +25,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Set up session middleware
-app.use(session({
-    secret: process.env.SESSION_SECRET_KEY,
-    resave: false,
-    saveUninitialized: false,
-    store: new MongoStore({
-        mongoUrl: process.env.DB_URL,
-        ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks),
-        autoRemove: 'native',
-        collectionName: 'mySessions',
-        mongoOptions: {
-            useUnifiedTopology: true,
-        },
-    }),
-    cookie: {
-        SameSite: 'None',
-        secure: true,
-    },
-}));
-
 
 const frontendUrl = process.env.FRONTEND_URL
 const allowedOrigins = [frontendUrl];
@@ -62,6 +42,26 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Set up session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongoUrl: process.env.DB_URL,
+        ttl: 14 * 24 * 60 * 60, // session expiration in seconds (2 weeks),
+        autoRemove: 'native',
+        collectionName: 'mySessions',
+        mongoOptions: {
+            useUnifiedTopology: true,
+        },
+    }),
+    cookie: {
+        SameSite: 'none',
+        secure: true,
+    },
+}));
 
 // Middleware
 app.use(express.urlencoded({ extended: true }))
