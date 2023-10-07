@@ -18,10 +18,6 @@ require('./config/passport.js');
 
 const PORT = process.env.PORT || 5000;
 
-
-// Enable trust proxy to trust the headers from the proxy server
-app.set('trust proxy', true);
-
 // cloudinarys setup
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -62,6 +58,7 @@ app.use(session({
         },
     }),
     cookie: {
+        domain: 'authmaster.onrender.com',
         SameSite: 'none',
         secure: true,
     },
