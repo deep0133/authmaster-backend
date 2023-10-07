@@ -59,7 +59,7 @@ app.use(session({
     }),
     cookie: {
         domain: 'authmaster.onrender.com',
-        SameSite: 'none',
+        sameSite: 'none',
         secure: true,
     },
 }));
